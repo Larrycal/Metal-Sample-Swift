@@ -21,6 +21,7 @@
 		467FE909267C3BB20002CAB9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 467FE908267C3BB20002CAB9 /* Assets.xcassets */; };
 		467FE90C267C3BB20002CAB9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 467FE90A267C3BB20002CAB9 /* LaunchScreen.storyboard */; };
 		467FE918267C3C6A0002CAB9 /* CaptureSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467FE917267C3C6A0002CAB9 /* CaptureSessionManager.swift */; };
+		46EDA135267F6AEB00283568 /* ReaderWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46EDA134267F6AEB00283568 /* ReaderWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,7 @@
 		467FE90B267C3BB20002CAB9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		467FE90D267C3BB20002CAB9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		467FE917267C3C6A0002CAB9 /* CaptureSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaptureSessionManager.swift; sourceTree = "<group>"; };
+		46EDA134267F6AEB00283568 /* ReaderWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderWriter.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 			isa = PBXGroup;
 			children = (
 				467FE917267C3C6A0002CAB9 /* CaptureSessionManager.swift */,
+				46EDA134267F6AEB00283568 /* ReaderWriter.swift */,
 			);
 			path = CaptureSession;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4634E663267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift in Sources */,
+				46EDA135267F6AEB00283568 /* ReaderWriter.swift in Sources */,
 				467FE904267C3BB00002CAB9 /* ViewController.swift in Sources */,
 				467FE900267C3BB00002CAB9 /* AppDelegate.swift in Sources */,
 				467FE902267C3BB00002CAB9 /* SceneDelegate.swift in Sources */,

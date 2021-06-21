@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:MetalDevelop/MetalDevelop.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:AVCaptureSession/AVCaptureSession.xcodeproj">
    </FileRef>
    <FileRef
