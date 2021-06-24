@@ -12,6 +12,9 @@
 		4634E666267C8995000E29B5 /* SnapKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E664267C8995000E29B5 /* SnapKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4634E668267C904D000E29B5 /* RevealServer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E667267C904D000E29B5 /* RevealServer.xcframework */; };
 		4634E669267C904D000E29B5 /* RevealServer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E667267C904D000E29B5 /* RevealServer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		465F453E268479030089A414 /* MetalCaptureVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465F453D268479030089A414 /* MetalCaptureVideoView.swift */; };
+		465F454026847AA50089A414 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465F453F26847AA50089A414 /* MetalRenderer.swift */; };
+		465F4543268483150089A414 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 465F4542268483150089A414 /* Shader.metal */; };
 		466F9FF3267C54960091A031 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 466F9FF2267C54960091A031 /* Utility.framework */; };
 		466F9FF4267C54960091A031 /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 466F9FF2267C54960091A031 /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		467FE900267C3BB00002CAB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467FE8FF267C3BB00002CAB9 /* AppDelegate.swift */; };
@@ -44,6 +47,11 @@
 		4634E662267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVCaptureVideoPreviewView.swift; sourceTree = "<group>"; };
 		4634E664267C8995000E29B5 /* SnapKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = SnapKit.xcframework; path = ../Carthage/Build/SnapKit.xcframework; sourceTree = "<group>"; };
 		4634E667267C904D000E29B5 /* RevealServer.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = RevealServer.xcframework; path = "../../../../Library/Application Support/Reveal/RevealServer/RevealServer.xcframework"; sourceTree = "<group>"; };
+		465F453D268479030089A414 /* MetalCaptureVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalCaptureVideoView.swift; sourceTree = "<group>"; };
+		465F453F26847AA50089A414 /* MetalRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalRenderer.swift; sourceTree = "<group>"; };
+		465F4542268483150089A414 /* Shader.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shader.metal; sourceTree = "<group>"; };
+		465F4545268483400089A414 /* AVCaptureSession-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AVCaptureSession-Bridging-Header.h"; sourceTree = "<group>"; };
+		465F45492684835A0089A414 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
 		466F9FF2267C54960091A031 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		467FE8FC267C3BB00002CAB9 /* AVCaptureSession.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AVCaptureSession.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		467FE8FF267C3BB00002CAB9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -71,6 +79,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		465F453C268478CB0089A414 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				465F45412684830C0089A414 /* MSL */,
+				465F453D268479030089A414 /* MetalCaptureVideoView.swift */,
+				465F453F26847AA50089A414 /* MetalRenderer.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
+		465F45412684830C0089A414 /* MSL */ = {
+			isa = PBXGroup;
+			children = (
+				465F45492684835A0089A414 /* ShaderTypes.h */,
+				465F4542268483150089A414 /* Shader.metal */,
+			);
+			path = MSL;
+			sourceTree = "<group>";
+		};
+		465F4544268483210089A414 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				467FE905267C3BB00002CAB9 /* Main.storyboard */,
+				467FE908267C3BB20002CAB9 /* Assets.xcassets */,
+				467FE90A267C3BB20002CAB9 /* LaunchScreen.storyboard */,
+				467FE90D267C3BB20002CAB9 /* Info.plist */,
+				465F4545268483400089A414 /* AVCaptureSession-Bridging-Header.h */,
+			);
+			path = Other;
+			sourceTree = "<group>";
+		};
 		466F9FF1267C54960091A031 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -101,15 +140,13 @@
 		467FE8FE267C3BB00002CAB9 /* AVCaptureSession */ = {
 			isa = PBXGroup;
 			children = (
+				465F4544268483210089A414 /* Other */,
+				465F453C268478CB0089A414 /* Metal */,
 				467FE916267C3C5B0002CAB9 /* CaptureSession */,
 				467FE8FF267C3BB00002CAB9 /* AppDelegate.swift */,
 				467FE901267C3BB00002CAB9 /* SceneDelegate.swift */,
 				467FE903267C3BB00002CAB9 /* ViewController.swift */,
 				4634E662267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift */,
-				467FE905267C3BB00002CAB9 /* Main.storyboard */,
-				467FE908267C3BB20002CAB9 /* Assets.xcassets */,
-				467FE90A267C3BB20002CAB9 /* LaunchScreen.storyboard */,
-				467FE90D267C3BB20002CAB9 /* Info.plist */,
 			);
 			path = AVCaptureSession;
 			sourceTree = "<group>";
@@ -155,6 +192,7 @@
 				TargetAttributes = {
 					467FE8FB267C3BB00002CAB9 = {
 						CreatedOnToolsVersion = 12.1;
+						LastSwiftMigration = 1250;
 					};
 				};
 			};
@@ -194,7 +232,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				465F454026847AA50089A414 /* MetalRenderer.swift in Sources */,
 				4634E663267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift in Sources */,
+				465F453E268479030089A414 /* MetalCaptureVideoView.swift in Sources */,
+				465F4543268483150089A414 /* Shader.metal in Sources */,
 				46EDA135267F6AEB00283568 /* ReaderWriter.swift in Sources */,
 				467FE904267C3BB00002CAB9 /* ViewController.swift in Sources */,
 				467FE900267C3BB00002CAB9 /* AppDelegate.swift in Sources */,
@@ -346,10 +387,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = RY3E3AFV2D;
-				INFOPLIST_FILE = AVCaptureSession/Info.plist;
+				INFOPLIST_FILE = AVCaptureSession/Other/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -357,6 +399,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.larry.AVCaptureSession;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVCaptureSession/Other/AVCaptureSession-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -367,10 +411,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = RY3E3AFV2D;
-				INFOPLIST_FILE = AVCaptureSession/Info.plist;
+				INFOPLIST_FILE = AVCaptureSession/Other/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -378,6 +423,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.larry.AVCaptureSession;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "AVCaptureSession/Other/AVCaptureSession-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

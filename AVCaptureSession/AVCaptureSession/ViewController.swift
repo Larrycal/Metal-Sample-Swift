@@ -18,6 +18,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         func addAndStartVideoView() {
+            renderer = MetalRenderer(view: capturePreviewView)
+            capturePreviewView.delegate = renderer
+            if let device = capturePreviewView.device {
+                CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, device, nil, &textureCache)
+            }
             view.addSubview(capturePreviewView)
             view.addSubview(previewImageView)
             capturePreviewView.addSubview(effectiveView)
@@ -72,10 +77,10 @@ class ViewController: UIViewController {
         return temp
     }()
     
-    private lazy var capturePreviewView: AVCaptureVideoPreviewView = {
-        let temp = AVCaptureVideoPreviewView()
-        temp.videoPreviewLayer.session = sessionManager.session
-        temp.videoPreviewLayer.videoGravity = .resizeAspectFill
+    private lazy var capturePreviewView: MetalCaptureVideoView = {
+        let temp = MetalCaptureVideoView()
+//        temp.videoPreviewLayer.session = sessionManager.session
+//        temp.videoPreviewLayer.videoGravity = .resizeAspectFill
         return temp
     }()
     
@@ -109,12 +114,30 @@ class ViewController: UIViewController {
     }()
     
     private lazy var recordingQueue: DispatchQueue = {
-        let temp = DispatchQueue(label: "com.larry.AVCaptureSession.recordingQueue",qos: .userInitiated)
+        let temp = DispatchQueue(label: "com.larry.AVCaptureSession.recordingQueue",qos: .userInteractive)
         return temp
     }()
     
     private var writer:ReaderWriter?
     private var sessionAtSourceTime: CMTime?
+    private var renderer: MetalRenderer?
+    private var textureCache: CVMetalTextureCache?
+//    private var texture: CVMetalTexture?
+    private var copiedSampleBuffer: CMSampleBuffer?
+    private var lock: NSRecursiveLock = NSRecursiveLock()
+    private var isRenderingWithLock: Bool {
+        get {
+            return _isRendering
+        }
+        set {
+            if lock.try() {
+                lock.lock()
+                _isRendering = newValue
+                lock.unlock()
+            }
+        }
+    }
+    private var _isRendering: Bool = false
 }
 
 private extension ViewController {
@@ -148,20 +171,26 @@ private extension ViewController {
     // MARK: - action
     @objc func shotButtonClick() {
         print("shot 事件触发")
-        PHPhotoLibrary.requestAuthorization({ status in
-            guard status == .authorized else { return }
-            DispatchQueue.main.async {
-                self.shotButton.isEnabled = false
-                let setting = AVCapturePhotoSettings()
-                let pbpf = setting.availablePreviewPhotoPixelFormatTypes[0]
-                setting.previewPhotoFormat = [
-                    kCVPixelBufferPixelFormatTypeKey as String: pbpf,
-                    kCVPixelBufferWidthKey as String: self.capturePreviewView.frame.width * UIScreen.main.scale,
-                    kCVPixelBufferHeightKey as String: self.capturePreviewView.frame.height * UIScreen.main.scale
-                ]
-                self.sessionManager.shot(with: AVCapturePhotoSettings(), delegate: self)
-            }
-        })
+        sessionManager.startRecord(delegate: self, queue: recordingQueue)
+//        var config = WriterConfigration(outputURL: URL(fileURLWithPath: Constants.userTempDirectoryPath + "test.mp4"))
+//        var settings = config.settings
+//        settings[AVVideoWidthKey] = capturePreviewView.frame.width * UIScreen.main.scale
+//        settings[AVVideoHeightKey] = capturePreviewView.frame.height * UIScreen.main.scale
+//        config.settings = settings
+//        PHPhotoLibrary.requestAuthorization({ status in
+//            guard status == .authorized else { return }
+//            DispatchQueue.main.async {
+//                self.shotButton.isEnabled = false
+//                let setting = AVCapturePhotoSettings()
+//                let pbpf = setting.availablePreviewPhotoPixelFormatTypes[0]
+//                setting.previewPhotoFormat = [
+//                    kCVPixelBufferPixelFormatTypeKey as String: pbpf,
+//                    kCVPixelBufferWidthKey as String: self.capturePreviewView.frame.width * UIScreen.main.scale,
+//                    kCVPixelBufferHeightKey as String: self.capturePreviewView.frame.height * UIScreen.main.scale
+//                ]
+//                self.sessionManager.shot(with: AVCapturePhotoSettings(), delegate: self)
+//            }
+//        })
     }
     
     @objc func cameraChangeClick() {
@@ -179,37 +208,37 @@ private extension ViewController {
     }
     
     @objc func recordHandler(_ gesture: UILongPressGestureRecognizer) {
-        switch gesture.state {
-        case .began:
-            shotButton.isHighlighted = true
-            sessionManager.startRecord(delegate: self, queue: recordingQueue)
-            var config = WriterConfigration(outputURL: URL(fileURLWithPath: Constants.userTempDirectoryPath + "test.mp4"))
-            var settings = config.settings
-            settings[AVVideoWidthKey] = capturePreviewView.frame.width * UIScreen.main.scale
-            settings[AVVideoHeightKey] = capturePreviewView.frame.height * UIScreen.main.scale
-            config.settings = settings
-            writer = try? ReaderWriter(writerConfigration: config)
-            if writer?.start() == true {
-                print("start recording")
-            }
-        case .changed,.possible:
-            shotButton.isHighlighted = true
-        case .cancelled,.ended,.failed:
-            print("finish")
-            shotButton.isHighlighted = false
-            writer?.videoWriterInput.markAsFinished()
-            writer?.finish() {
-                self.sessionManager.stopRecord()
-                self.sessionAtSourceTime = nil
-                self.writer = nil
-                PHPhotoLibrary.shared().performChanges({
-                    let change = PHAssetCreationRequest.forAsset()
-                    change.addResource(with: .video, fileURL: URL(fileURLWithPath: Constants.userTempDirectoryPath + "test.mp4"), options: nil)
-                }, completionHandler: nil)
-            }
-        @unknown default:
-            break
-        }
+//        switch gesture.state {
+//        case .began:
+//            shotButton.isHighlighted = true
+//            sessionManager.startRecord(delegate: self, queue: recordingQueue)
+//            var config = WriterConfigration(outputURL: URL(fileURLWithPath: Constants.userTempDirectoryPath + "test.mp4"))
+//            var settings = config.settings
+//            settings[AVVideoWidthKey] = capturePreviewView.frame.width * UIScreen.main.scale
+//            settings[AVVideoHeightKey] = capturePreviewView.frame.height * UIScreen.main.scale
+//            config.settings = settings
+//            writer = try? ReaderWriter(writerConfigration: config)
+//            if writer?.start() == true {
+//                print("start recording")
+//            }
+//        case .changed,.possible:
+//            shotButton.isHighlighted = true
+//        case .cancelled,.ended,.failed:
+//            print("finish")
+//            shotButton.isHighlighted = false
+//            writer?.videoWriterInput.markAsFinished()
+//            writer?.finish() {
+//                self.sessionManager.stopRecord()
+//                self.sessionAtSourceTime = nil
+//                self.writer = nil
+//                PHPhotoLibrary.shared().performChanges({
+//                    let change = PHAssetCreationRequest.forAsset()
+//                    change.addResource(with: .video, fileURL: URL(fileURLWithPath: Constants.userTempDirectoryPath + "test.mp4"), options: nil)
+//                }, completionHandler: nil)
+//            }
+//        @unknown default:
+//            break
+//        }
     }
 }
 
@@ -233,16 +262,30 @@ extension ViewController: AVCapturePhotoCaptureDelegate {
 // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 extension ViewController: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard writer?.isStartWritting == true else { return }
-        if sessionAtSourceTime == nil {
-            sessionAtSourceTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-            writer?.assetWriter.startSession(atSourceTime: sessionAtSourceTime!)
-        }
-        if output is AVCaptureVideoDataOutput, writer?.videoWriterInput.isReadyForMoreMediaData == true {
-            let error = writer?.record(sampleBuffer)
-            if error != nil {
-                print(error!)
-            }
+//        guard writer?.isStartWritting == true else { return }
+//        if sessionAtSourceTime == nil {
+//            sessionAtSourceTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+//            writer?.assetWriter.startSession(atSourceTime: sessionAtSourceTime!)
+//        }
+//        if output is AVCaptureVideoDataOutput, writer?.videoWriterInput.isReadyForMoreMediaData == true {
+//            let error = writer?.record(sampleBuffer)
+//            if error != nil {
+//                print(error!)
+//            }
+//        }
+//            CMSampleBufferCreateCopy(allocator: kCFAllocatorDefault, sampleBuffer: sampleBuffer, sampleBufferOut: &copiedSampleBuffer)
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer), let textureCache = textureCache else { return }
+        let width = CVPixelBufferGetWidth(imageBuffer)
+        let height = CVPixelBufferGetHeight(imageBuffer)
+        var texture: CVMetalTexture?
+        guard CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault, textureCache, imageBuffer, nil, .bgra8Unorm, width, height, 0, &texture) == kCVReturnSuccess, texture != nil, let metalTexture = CVMetalTextureGetTexture(texture!) else { return }
+        renderer?.texture = metalTexture
+        CVMetalTextureCacheFlush(textureCache, 0)
+    }
+    
+    func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if let att = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, createIfNecessary: false) {
+            print(att)
         }
     }
 }

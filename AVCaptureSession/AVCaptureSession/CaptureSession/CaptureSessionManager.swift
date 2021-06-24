@@ -56,9 +56,10 @@ class CaptureSessionManager {
             currentInput = input
             currentPhotoOutput = output
             let videoOutput = AVCaptureVideoDataOutput()
-            videoOutput.alwaysDiscardsLateVideoFrames = true
+            videoOutput.alwaysDiscardsLateVideoFrames = false
+            videoOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_32BGRA]
             session.addOutput(videoOutput)
-            currentVideoOutput = videoOutput
+            currentVideoRecordOutput = videoOutput
             session.beginConfiguration()
             do {
                 try device.lockForConfiguration()
@@ -78,7 +79,7 @@ class CaptureSessionManager {
     
     func start() {
         if session.inputs.isEmpty { return }
-        currentVideoOutput?.connection(with: .video)?.videoOrientation = .portrait
+        currentVideoRecordOutput?.connection(with: .video)?.videoOrientation = .portrait
         currentPhotoOutput?.connection(with: .video)?.videoOrientation = .portrait
         session.startRunning()
     }
@@ -92,11 +93,11 @@ class CaptureSessionManager {
     }
     
     func startRecord(delegate: AVCaptureVideoDataOutputSampleBufferDelegate,queue: DispatchQueue?) {
-        currentVideoOutput?.setSampleBufferDelegate(delegate, queue: queue)
+        currentVideoRecordOutput?.setSampleBufferDelegate(delegate, queue: queue)
     }
     
     func stopRecord() {
-        currentVideoOutput?.setSampleBufferDelegate(nil, queue: nil)
+        currentVideoRecordOutput?.setSampleBufferDelegate(nil, queue: nil)
     }
     
     func setCameraPosition(_ position: AVCaptureDevice.Position) {
@@ -122,13 +123,13 @@ class CaptureSessionManager {
                 session.addInput(input)
                 currentInput = input
             }
-            currentVideoOutput?.connection(with: .video)?.videoOrientation = .portrait
+            currentVideoRecordOutput?.connection(with: .video)?.videoOrientation = .portrait
             if position == .front {
                 currentPhotoOutput?.connection(with: .video)?.isVideoMirrored = true
-                currentVideoOutput?.connection(with: .video)?.isVideoMirrored = true
+                currentVideoRecordOutput?.connection(with: .video)?.isVideoMirrored = true
             } else {
                 currentPhotoOutput?.connection(with: .video)?.isVideoMirrored = false
-                currentVideoOutput?.connection(with: .video)?.isVideoMirrored = false
+                currentVideoRecordOutput?.connection(with: .video)?.isVideoMirrored = false
             }
             device.unlockForConfiguration()
             currentDevice = device
@@ -173,12 +174,12 @@ class CaptureSessionManager {
                 print("无法添加PhotoOutput")
             }
             let videoOutput = AVCaptureVideoDataOutput()
-            if currentVideoOutput != nil {
-                session.removeOutput(currentVideoOutput!)
+            if currentVideoRecordOutput != nil {
+                session.removeOutput(currentVideoRecordOutput!)
             }
             if session.canAddOutput(videoOutput) {
                 session.addOutput(videoOutput)
-                currentVideoOutput = videoOutput
+                currentVideoRecordOutput = videoOutput
             } else {
                 print("无法添加VideoOutput")
             }
@@ -190,7 +191,7 @@ class CaptureSessionManager {
     private var currentDevice: AVCaptureDevice?
     private var currentInput: AVCaptureInput?
     private var currentPhotoOutput: AVCapturePhotoOutput?
-    private var currentVideoOutput: AVCaptureVideoDataOutput?
+    private var currentVideoRecordOutput: AVCaptureVideoDataOutput?
 }
 
 // MARK: - private

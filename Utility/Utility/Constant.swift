@@ -23,6 +23,9 @@ public struct Constants {
     public static var onePixel: CGFloat {
         return 1/UIScreen.main.scale
     }
+    public static var screenScale: CGFloat {
+        return UIScreen.main.scale
+    }
     
     public static var userCacheDirectoryPath: String {
         return NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true).first ?? ""

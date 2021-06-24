@@ -26,6 +26,8 @@ class ViewController: UIViewController {
     
     private lazy var mtkView: MTKView = {
         let temp = MTKView()
+        temp.depthStencilPixelFormat = .depth32Float
+        temp.clearDepth = 1.0
         return temp
     }()
     
@@ -35,11 +37,11 @@ class ViewController: UIViewController {
 private extension ViewController {
     func setupMetal() {
         guard let device = MTLCreateSystemDefaultDevice() else { print("创建MTLDevice失败");return }
-        renderer = Renderer(with: mtkView)
         mtkView.device = device
+        renderer = Renderer(with: mtkView)
         mtkView.delegate = renderer
-        mtkView.enableSetNeedsDisplay = true
-        mtkView.clearColor = Colors.Nord.nord8.metalClearColor
+//        mtkView.enableSetNeedsDisplay = true
+        mtkView.clearColor = Colors.Nord.nord8.metalColor
     }
 }
 

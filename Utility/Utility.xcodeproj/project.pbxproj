@@ -10,6 +10,7 @@
 		4634E66B267C9636000E29B5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4634E66A267C9636000E29B5 /* Colors.swift */; };
 		4634E66D267C96A1000E29B5 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4634E66C267C96A1000E29B5 /* UIColorExtension.swift */; };
 		4634E66F267CE2A6000E29B5 /* Tool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4634E66E267CE2A6000E29B5 /* Tool.swift */; };
+		465F453B268327830089A414 /* MetalMath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465F453A268327830089A414 /* MetalMath.swift */; };
 		466F9FEF267C53FB0091A031 /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 466F9FEE267C53FB0091A031 /* Constant.swift */; };
 /* End PBXBuildFile section */
 
@@ -17,6 +18,7 @@
 		4634E66A267C9636000E29B5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		4634E66C267C96A1000E29B5 /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		4634E66E267CE2A6000E29B5 /* Tool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tool.swift; sourceTree = "<group>"; };
+		465F453A268327830089A414 /* MetalMath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalMath.swift; sourceTree = "<group>"; };
 		466F9FE1267C53CF0091A031 /* Utility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Utility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		466F9FE5267C53CF0091A031 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		466F9FEE267C53FB0091A031 /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
@@ -33,6 +35,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		465F45392683276C0089A414 /* Metal */ = {
+			isa = PBXGroup;
+			children = (
+				465F453A268327830089A414 /* MetalMath.swift */,
+			);
+			path = Metal;
+			sourceTree = "<group>";
+		};
 		466F9FD7267C53CF0091A031 = {
 			isa = PBXGroup;
 			children = (
@@ -52,6 +62,7 @@
 		466F9FE3267C53CF0091A031 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
+				465F45392683276C0089A414 /* Metal */,
 				466F9FE5267C53CF0091A031 /* Info.plist */,
 				466F9FEE267C53FB0091A031 /* Constant.swift */,
 				4634E66A267C9636000E29B5 /* Colors.swift */,
@@ -141,6 +152,7 @@
 			files = (
 				466F9FEF267C53FB0091A031 /* Constant.swift in Sources */,
 				4634E66B267C9636000E29B5 /* Colors.swift in Sources */,
+				465F453B268327830089A414 /* MetalMath.swift in Sources */,
 				4634E66D267C96A1000E29B5 /* UIColorExtension.swift in Sources */,
 				4634E66F267CE2A6000E29B5 /* Tool.swift in Sources */,
 			);
