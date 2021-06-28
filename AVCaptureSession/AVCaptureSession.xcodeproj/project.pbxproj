@@ -8,13 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		4634E663267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4634E662267C75D9000E29B5 /* AVCaptureVideoPreviewView.swift */; };
-		4634E665267C8995000E29B5 /* SnapKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E664267C8995000E29B5 /* SnapKit.xcframework */; };
-		4634E666267C8995000E29B5 /* SnapKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E664267C8995000E29B5 /* SnapKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4634E668267C904D000E29B5 /* RevealServer.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E667267C904D000E29B5 /* RevealServer.xcframework */; };
 		4634E669267C904D000E29B5 /* RevealServer.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E667267C904D000E29B5 /* RevealServer.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		465F453E268479030089A414 /* MetalCaptureVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465F453D268479030089A414 /* MetalCaptureVideoView.swift */; };
 		465F454026847AA50089A414 /* MetalRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465F453F26847AA50089A414 /* MetalRenderer.swift */; };
 		465F4543268483150089A414 /* Shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 465F4542268483150089A414 /* Shader.metal */; };
+		465F454A2685797F0089A414 /* SnapKit.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E664267C8995000E29B5 /* SnapKit.xcframework */; };
+		465F454B2685797F0089A414 /* SnapKit.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4634E664267C8995000E29B5 /* SnapKit.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		466F9FF3267C54960091A031 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 466F9FF2267C54960091A031 /* Utility.framework */; };
 		466F9FF4267C54960091A031 /* Utility.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 466F9FF2267C54960091A031 /* Utility.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		467FE900267C3BB00002CAB9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 467FE8FF267C3BB00002CAB9 /* AppDelegate.swift */; };
@@ -34,8 +34,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4634E666267C8995000E29B5 /* SnapKit.xcframework in Embed Frameworks */,
 				466F9FF4267C54960091A031 /* Utility.framework in Embed Frameworks */,
+				465F454B2685797F0089A414 /* SnapKit.xcframework in Embed Frameworks */,
 				4634E669267C904D000E29B5 /* RevealServer.xcframework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -70,8 +70,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4634E665267C8995000E29B5 /* SnapKit.xcframework in Frameworks */,
 				466F9FF3267C54960091A031 /* Utility.framework in Frameworks */,
+				465F454A2685797F0089A414 /* SnapKit.xcframework in Frameworks */,
 				4634E668267C904D000E29B5 /* RevealServer.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -388,6 +388,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = RY3E3AFV2D;
@@ -399,6 +400,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.larry.AVCaptureSession;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "AVCaptureSession/Other/AVCaptureSession-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -412,6 +414,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
 				DEVELOPMENT_TEAM = RY3E3AFV2D;
@@ -423,6 +426,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.larry.AVCaptureSession;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "AVCaptureSession/Other/AVCaptureSession-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

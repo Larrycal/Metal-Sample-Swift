@@ -8,13 +8,15 @@
 import Foundation
 import simd
 import MetalKit
+import func AVFoundation.AVMakeRect
 
 class MetalRenderer: NSObject {
     let device: MTLDevice?
     let commandQueue: MTLCommandQueue?
     let pipelineState: MTLRenderPipelineState?
     var texture: MTLTexture?
-    var contentMode: UIView.ContentMode = .scaleAspectFill
+    var contentMode: ContentMode = .scaleAspectFill
+    
     init?(view: MetalCaptureVideoView) {
         self.device = view.device
         lastDrawableSize = view.metalLayer.drawableSize
@@ -42,12 +44,16 @@ private extension MetalRenderer {
     func loadVertices() {
         var heightScale:Float = 1
         var widthScale:Float = 1
+        let bounds = CGRect(origin: .zero, size: lastDrawableSize)
+        let inset = AVMakeRect(aspectRatio: lastTextureSize, insideRect: bounds)
         switch contentMode {
         case .scaleAspectFill:
-            widthScale = Float(lastTextureSize.width / lastDrawableSize.width)
+            widthScale = Float(lastDrawableSize.height / inset.height)
+            heightScale = Float(lastDrawableSize.width / inset.width)
         case .scaleAspectFit:
-            break
-        default:
+            widthScale = Float(inset.width / lastDrawableSize.width)
+            heightScale = Float(inset.height / lastDrawableSize.height)
+        case .scaleToFill:
             break
         }
         let vertices:[Vertex] = [
@@ -69,7 +75,6 @@ private extension MetalRenderer {
 
 extension MetalRenderer: MetalCaptureVideoViewDelegate {
     func draw(in view: MetalCaptureVideoView) {
-        loadVertices()
         guard let pipelineState = pipelineState else { return }
         guard let renderPassDescriptor = view.currentRenderPassDescriptor else { return }
         guard let indicesBuffer = indicesBuffer else { return }
@@ -77,9 +82,12 @@ extension MetalRenderer: MetalCaptureVideoViewDelegate {
         guard view.currentDrawable != nil else {
             return
         }
-        lastTextureSize = CGSize(width: CGFloat(texture.width), height: CGFloat(texture.height))
-        lastDrawableSize = view.metalLayer.drawableSize
-        print("TextureSize:",CGSize(width: CGFloat(texture.width), height: CGFloat(texture.height)), "drawableSize:\(view.metalLayer.drawableSize)")
+        let textureSize = CGSize(width: texture.width, height: texture.height)
+        if !textureSize.equalTo(lastTextureSize) || view.metalLayer.drawableSize.equalTo(lastDrawableSize) {
+            lastTextureSize = textureSize
+            lastDrawableSize = view.metalLayer.drawableSize
+            loadVertices()
+        }
         let commandBuffer = commandQueue?.makeCommandBuffer()
         let encoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         encoder?.setRenderPipelineState(pipelineState)
@@ -89,5 +97,13 @@ extension MetalRenderer: MetalCaptureVideoViewDelegate {
         encoder?.endEncoding()
         commandBuffer?.present(view.currentDrawable!)
         commandBuffer?.commit()
+    }
+}
+
+extension MetalRenderer {
+    enum ContentMode {
+        case scaleAspectFill
+        case scaleAspectFit
+        case scaleToFill
     }
 }
